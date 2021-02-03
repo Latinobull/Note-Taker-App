@@ -16,9 +16,18 @@ module.exports = function (app) {
   });
 
   app.delete("/api/notes/:id", function (req, res) {
-    var notesDelete = notes.filter(({ id }) => id !== req.params.id);
-    notes = notesDelete;
-    fs.writeFileSync("./db/db.json", JSON.stringify(notesDelete));
-    res.json(notesDelete);
+    var newNotes = [];
+    var idSearch = req.params.id;
+
+    for (i = 0; i < notes.length; i++) {
+      if (idSearch != notes[i].id) {
+        newNotes.push(notes[i]);
+      }
+    }
+
+    notes = newNotes;
+    fs.writeFileSync("./db/db.json", JSON.stringify(newNotes));
+
+    res.json(notes);
   });
 };
